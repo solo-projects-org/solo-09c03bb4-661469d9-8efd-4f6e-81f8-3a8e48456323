@@ -6,6 +6,7 @@ from typing import Optional
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 
+from .handover_api import router as handover_router
 from .lineage import AggregatedAnalysisError, AnalysisError, Analyzer
 
 app = FastAPI(
@@ -13,10 +14,14 @@ app = FastAPI(
     description=(
         "基于 SQLGlot 解析（不执行 SQL），沿别名、普通星号与非递归 CTE 跨模型追踪"
         "待下线源列的引用，按模型输出依赖该列的输出列以及 WHERE / JOIN ON 条件，"
-        "每项附引用链。不支持聚合、集合运算与 CTE 之外的子查询。"
+        "每项附引用链。不支持聚合、集合运算与 CTE 之外的子查询。\n\n"
+        "同时提供联运交接单对号接口（POST /handovers、GET /mapping）：按交接单号"
+        "批量录入、更正或撤销一个结算月的交接单，沿有效交接单把同一包裹在各承运商的"
+        "运单号归为同一票，对照与交接单一起持久化到 SQLite，查询只读对照。"
     ),
-    version="1.0.0",
+    version="1.1.0",
 )
+
 
 
 class SourceTable(BaseModel):
@@ -183,3 +188,6 @@ def analyze(request: AnalyzeRequest) -> AnalyzeResponse:
 @app.get("/healthz", include_in_schema=False)
 def healthz() -> dict:
     return {"status": "ok"}
+
+
+app.include_router(handover_router)

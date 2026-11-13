@@ -1,0 +1,20 @@
+{
+  "settlement_month": "2026-10",
+  "sheets": [
+    {
+      "handover_no": "HJ-0001",
+      "carrier_a": "承运商甲",
+      "waybill_no_a": "YD-1001",
+      "carrier_b": "承运商乙",
+      "waybill_no_b": "YT-7001"
+    },
+    {
+      "handover_no": "HJ-0002",
+      "carrier_a": "承运商乙",
+      "waybill_no_a": "YT-7001",
+      "carrier_b": "承运商丙",
+      "waybill_no_b": "SF-9001"
+    }
+  ],
+  "revoke": []
+}
